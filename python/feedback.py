@@ -1,4 +1,4 @@
-#!/usr/bin/env python26
+#!/usr/bin/python26
 
 import cgi
 from email.mime.text import MIMEText
@@ -6,9 +6,9 @@ import json
 import smtplib
 
 FEEDBACK = 'feedback@inspirebeta.net'
-CRAZYSPIRESMACHINE = 'crazyspiresmachine@slac.stanford.edu'
+CRAZYSPIRESMACHINE = 'no-reply@slac.stanford.edu'
 
-def mail_feedback(yes_no, message):
+def mail_feedback(search, yes_no, message):
     """ take the info, send it to INSPIRE feedback """
     if yes_no:
         yes_no = 'yes'
@@ -17,13 +17,16 @@ def mail_feedback(yes_no, message):
     message = """
     Dear INSPIRE feedback folks,
         A SPIRES user interacted with your box in SPIRES!
+
+        They were trying the search 
+            %(search)s
+
         What they said was
             Did INSPIRE give results you expected? %(yes_no)s
-            Why? %(message)s
+            Comments: %(message)s
 
-    Regards,
-    THE CRAZY SPIRES MACHINE
-    """ % { 'message' : message,
+    """ % { 'search' : search,
+            'message' : message,
             'yes_no' : yes_no }
 
     msg = MIMEText(message)
@@ -44,8 +47,11 @@ if __name__ == '__main__':
     fs = cgi.FieldStorage()
     message = ''
     yes_no = False
+    search = ''	
+    if fs.has_key('search'):
+        search = fs.getvalue('search')
     if fs.has_key('message'):
         message = fs.getvalue('message')
     if fs.has_key('yesNo'):
         yes_no = fs.getvalue('yesNo')
-    print json.dumps(mail_feedback(yes_no, message))
+    print json.dumps(mail_feedback(search, yes_no, message))

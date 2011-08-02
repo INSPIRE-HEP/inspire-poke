@@ -1,4 +1,4 @@
-#!/usr/bin/env python26
+#!/usr/bin/python26
 
 import cgi
 import json
@@ -58,13 +58,15 @@ def get_inspire_results(query):
     raw = urlopen(INSPIRE_BETA + encoded_query + OPTIONS_MARC).read()
     results = decode(raw)
     raw_ids = urlopen(INSPIRE_BETA + encoded_query + OPTIONS_ID).read()
+    url_results = INSPIRE_BETA + encoded_query
     try:
         num_results = len(eval(raw_ids))
     except SyntaxError:
         num_results = 0
     return {
             'results' : results,
-            'num_results' : num_results
+            'num_results' : num_results,
+            'url_results' : url_results
            }
 
 
