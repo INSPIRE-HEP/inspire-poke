@@ -6,7 +6,7 @@ import json
 import smtplib
 
 FEEDBACK = 'feedback@inspirebeta.net'
-CRAZYSPIRESMACHINE = 'no-reply@slac.stanford.edu'
+CRAZYSPIRESMACHINE = 'spires-autofeedback@slac.stanford.edu'
 
 def mail_feedback(search, yes_no, message):
     """ take the info, send it to INSPIRE feedback """
@@ -18,7 +18,7 @@ def mail_feedback(search, yes_no, message):
     Dear INSPIRE feedback folks,
         A SPIRES user interacted with your box in SPIRES!
 
-        They were trying the search 
+        They were trying the search
             %(search)s
 
         What they said was
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     fs = cgi.FieldStorage()
     message = ''
     yes_no = False
-    search = ''	
+    search = ''
     if fs.has_key('search'):
         search = fs.getvalue('search')
     if fs.has_key('message'):

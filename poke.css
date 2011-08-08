@@ -1,5 +1,9 @@
 #inspireNudge {
     background-color: #FC9;
-    color: #666;
+    color: #333;
+    padding:1em;
+    margin:1em;
+    border:2px solid #666;
+    -moz-border-radius: 8px 8px 8px 8px; 
 }
 

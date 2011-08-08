@@ -1,17 +1,27 @@
 var ajaxRequest = null;
 var nudgeBox;
 
-function create_nudge_box() {
-    nudgeBox = document.getElementById('inspireNudge');
-    get_inspire_results();
+
+function get_query() {
+    stuff = window.location.search;
+    search = stuff.split('rawcmd=')[1].split('&')[0];
+    return search;
+}
+
+function get_inspire_results() {
+    $.getJSON('https://inspire.slac.stanford.edu/cgi-bin/queryinspire.py?query='+get_query()+'&callback=?',
+              {},
+              populate_results);
 }
 
 function toggle_visibility_of_why() {
     why = document.getElementById('why');
-    if (why.style.display == 'none')
+    if (why.style.display == 'none') {
         why.style.display = '';
-    else
+    }
+    else {
         why.style.display = 'none';
+    }
 }
 
 function create_feedback_functionality() {
@@ -67,18 +77,17 @@ function create_feedback_functionality() {
     submit.setAttribute('onclick', 'notify()');
 
     feedbackForm.appendChild(submit);
-
     nudgeBox.appendChild(feedbackForm);
 }
 
 function notify() {
     yesNo = document.getElementById('yesNo').children[0].checked;
     why = document.getElementById('whyBox').value;
-    search =  get_query()
-    $.ajax('http://tislnx1.slac.stanford.edu/cgi-bin/feedback.py?yesNo='+yesNo+'&message='+why+'&search='+search);
+    search =  get_query();
+    $.ajax('https://inspire.slac.stanford.edu/cgi-bin/feedback.py?yesNo='+yesNo+'&message='+why+'&search='+search);
 
     feedbackForm = document.getElementById('feedbackForm');
-    feedbackForm.innerHTML = 'Thanks!'
+    feedbackForm.innerHTML = 'Thanks!';
 }
 
 function populate_results(data, textStatus, jqXHR) {
@@ -87,44 +96,43 @@ function populate_results(data, textStatus, jqXHR) {
     showOff = $('<div></div>');
     showOff.addClass('inspireresults');
     showOff.attr('id', 'inspireresults');
-    showOff.html('INSPIRE will be replacing SPIRES in September. <br /> While waiting for SPIRES results, INSPIRE found <a href="' + data.url_results + '">' + data.num_results + ' result(s)</a> for your search');
+    showOff.html('INSPIRE found <a href="' + data.url_results + '">' + data.num_results + ' result(s)</a> for your search. <br />Top results from INSPIRE:');
 
-    list = $('<ol></ol>');
-    for (i=0; i<data.results.length; i++) {
-        result = data.results[i];
-        result.title = result.title.replace(/>/g, '&gt');
-        result.title = result.title.replace(/</g, '&lt');
-        item = $('<li></li>');
-        link = $('<a href="http://inspirebeta.net/record/' + result.recid + '">' + result.title + '. ' +
-                result.firstauthor + '</a>');
-        link.appendTo(item);
-        item.appendTo(list);
+    if (data.num_results > 0){
+        list = $('<ol></ol>');
+        for (i=0; i<data.results.length(); i++) {
+            result = data.results[i];
+            result.title = result.title.replace(/>/g, '&gt');
+            result.title = result.title.replace(/</g, '&lt');
+            list_item = $('<li></li>');
+            link = $('<a href="http://inspirebeta.net/record/' + result.recid + '">' + result.title + '. ' +
+                     result.firstauthor + '</a>');
+            link.appendTo(list_item);
+            list_item.appendTo(list);
+        }
+        list.appendTo(showOff);
     }
-    if (data.num_results > 1) {
-        item = $('<li>...</li>');
-        link = $('<a href="'+ data.url_results + '">See More INSPIRE Results</a>');
-        link.appendTo(item)
-        item.appendTo(list);
-    }
-    list.appendTo(showOff);
 
+    more = $('<div></div>');
+    if (data.num_results > 1){
+        link = $('<a href="'+ data.url_results + '">See More INSPIRE Results</a><br />');
+        link.appendTo(more);
+    }   
+    if (data.num_results == 0) {
+        link = $('<a href="'+ data.url_results + '">Oops, we found no results - click here to try directly on INSPIRE</a><br />');
+        link.appendTo(more);
+     
+    }
+    more.appendTo(showOff);
     showOff.appendTo($('div#inspireNudge'));
-
     feedbackForm = $('div#feedbackForm');
     feedbackForm.before(showOff);
     create_feedback_functionality();
     
 }
 
-function get_query() {
-    stuff = window.location.search;
-    search = stuff.split('rawcmd=')[1].split('&')[0];
-
-    return search;
+function create_nudge_box() {
+    nudgeBox = document.getElementById('inspireNudge');
+    get_inspire_results();
 }
 
-function get_inspire_results() {
-    $.getJSON('http://tislnx1.slac.stanford.edu/cgi-bin/queryinspire.py?query='+get_query(),
-              {},
-              populate_results);
-}

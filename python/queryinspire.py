@@ -63,6 +63,7 @@ def get_inspire_results(query):
         num_results = len(eval(raw_ids))
     except SyntaxError:
         num_results = 0
+
     return {
             'results' : results,
             'num_results' : num_results,
@@ -73,7 +74,13 @@ def get_inspire_results(query):
 if __name__ == '__main__':
     print "Content-type: application/json"
     print
-
+    out = ''
     fs = cgi.FieldStorage()
     if fs.has_key('query'):
-        print json.dumps(get_inspire_results(fs.getvalue('query')))
+        out =  json.dumps(get_inspire_results(fs.getvalue('query')))
+
+    # for JSONP cross-site
+    if fs.has_key('callback'):
+        print fs.getvalue('callback') + '(' + out + ')'
+    else:
+        print out
