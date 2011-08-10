@@ -1,8 +1,8 @@
-#!/usr/bin/python26
+#!/usr/bin/python
 
 import cgi
-from email.mime.text import MIMEText
-import json
+from email.MIMEText import MIMEText
+import simplejson as json
 import smtplib
 
 FEEDBACK = 'feedback@inspirebeta.net'

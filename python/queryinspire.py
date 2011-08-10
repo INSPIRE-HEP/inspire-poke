@@ -1,7 +1,7 @@
-#!/usr/bin/python26
+#!/usr/bin/python
 
 import cgi
-import json
+import simplejson as json
 from urllib import quote
 from urllib2 import urlopen
 
