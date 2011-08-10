@@ -6,3 +6,16 @@ tiny server in order to convince the user to use INSPIRE.  ;)
 
 to use it, just include the js and css files on an HTML document which has a div whose id
 is "inspireNudge".  that div will be populated with INSPIRE's data.
+
+Also include 
+
+onload="create_nudge_box()"
+
+on the <body> tag
+
+
+And load jquery:
+
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
+
+
