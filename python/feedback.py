@@ -30,7 +30,7 @@ def mail_feedback(search, yes_no, message):
             'yes_no' : yes_no }
 
     msg = MIMEText(message)
-    msg['Subject'] = 'INSPIRE feedback originating from SPIRES'
+    msg['Subject'] = 'INSPIRE feedback originating from SPIRES:' + yes_no
     msg['To'] = FEEDBACK
     msg['From'] = CRAZYSPIRESMACHINE
 
