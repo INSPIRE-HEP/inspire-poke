@@ -1,7 +1,9 @@
 JS_LOC = /var/www/html/spires/includes/
+JS_LOC = /afs/slac/www/spires/includes/
 CSS_LOC = $(JS_LOC)
 CGI_LOC = /var/www/cgi-bin/
 SPIRES_LOC = /var/www/html/spires/find/
+SPIRES_LOC = /afs/slac/www/spires/find/
 
 install: install-web install-cgi
 

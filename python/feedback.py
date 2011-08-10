@@ -34,7 +34,7 @@ def mail_feedback(search, yes_no, message):
     msg['To'] = FEEDBACK
     msg['From'] = CRAZYSPIRESMACHINE
 
-    s = smtplib.SMTP('smtp.slac.stanford.edu')
+    s = smtplib.SMTP('cernmx.cern.ch')
     s.sendmail(CRAZYSPIRESMACHINE, [FEEDBACK], msg.as_string())
     s.quit()
 
