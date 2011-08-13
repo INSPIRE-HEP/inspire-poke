@@ -10,9 +10,9 @@ CRAZYSPIRESMACHINE = 'spires-autofeedback@slac.stanford.edu'
 
 def mail_feedback(search, yes_no, message):
     """ take the info, send it to INSPIRE feedback """
-    if yes_no:
+    if yes_no == 'true':
         yes_no = 'yes'
-    else:
+    elif yes_no == 'false':
         yes_no = 'no'
     message = """
     Dear INSPIRE feedback folks,
